@@ -87,6 +87,17 @@ public class Account {
         }
     }
 
+    // Caution! CDAccount is also instanceof Account!
+    // Parameter needs to be Object since this is overriding (same signature)
+    @Override
+    public boolean equals(Object other) { // Upcasting (implicit)
+        if (other instanceof Account) {
+            return getId() == ((Account)other).getId();
+            // Downcasting inside () is always descendent!
+        }
+        return false;
+    }
+
     public void addMonthlyInterest() {
         double monthlyInterest = getMonthlyInterest();
         setBalance(getBalance() + monthlyInterest);
