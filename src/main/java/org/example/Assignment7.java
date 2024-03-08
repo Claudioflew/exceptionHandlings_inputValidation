@@ -79,6 +79,7 @@ public class Assignment7 {
             // This order matters! CDAccount first, otherwise all instances are instanceof Account
             // Therefore, everything will be handled as Account object.
             if (accounts.get(index) instanceof CDAccount) {
+                // Whenever downcasing, check if the object is downcasted instance
                 CDAccount target = (CDAccount)accounts.get(index);
                 output = String.format("Account #: %d\nAccount Type: CD\nAccount Mature Balance: %.2f",
                         target.getId(), target.getMatureBalance());
