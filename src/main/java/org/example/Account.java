@@ -3,21 +3,15 @@
 package org.example;
 
 import java.util.Date;
-import java.util.Scanner;
 
-public class Account {
-    private static double annualInterestRate;
+public abstract class Account {
+    private static double annualInterestRate; // % scale
     private int id;
     private double balance;
     private final Date dateCreated;
 
-    public Account() {
-        id = 0;
-        balance = 0;
-        dateCreated = new Date();
-    }
-
-    public Account(int id, double balance) {
+    protected Account() { this(1000, 0.0); }
+    protected Account(int id, double balance) {
         setId(id);
         setBalance(balance);
         dateCreated = new Date();
@@ -30,24 +24,23 @@ public class Account {
                 Account.annualInterestRate = annualInterestRate;
                 break;
             } else {
-                System.out.println("Invalid annual rate.. Please enter again: ");
-                Scanner input = new Scanner(System.in);
-                annualInterestRate = input.nextDouble();
+                System.out.println("Invalid annual rate.. The rate has been set to 3.00 %.");
+                Account.annualInterestRate = 3.0;
             }
         }
     }
 
     public int getId() { return id; }
-    public void setId(int id) {
+    private void setId(int id) {
         if (id >= 0) this.id = id;
         else {
-            System.out.println("Invalid ID.. The id has been set to 0.");
-            this.id = 0;
+            System.out.println("Invalid ID.. The id has been set to 1000.");
+            this.id = 1000;
         }
     }
 
     public double getBalance() { return balance; }
-    public void setBalance(double balance) {
+    protected void setBalance(double balance) {
         if (balance >= 0) this.balance = balance;
         else {
             System.out.println("Invalid balance.. The balance has been set to 0.");
@@ -57,24 +50,20 @@ public class Account {
 
     public Date getDateCreated() { return dateCreated; }
 
+    // Returns % scale
     public double getMonthlyInterestRate() {
         return getAnnualInterestRate() / 12;
     }
 
     public double getMonthlyInterest() {
-        double monthlyInterestRate = getMonthlyInterestRate();
+        double monthlyInterestRate = getMonthlyInterestRate() / 100;
         return (int)(getBalance() * monthlyInterestRate * 100) / 100.0;
     }
 
     public void withdraw(double amount) {
-        if (getBalance() - amount >= 0) {
-            setBalance(getBalance() - amount);
-            System.out.printf("Withdrawn %.2f - New balance: %.2f\n",
-                    amount, getBalance());
-        } else {
-            System.out.printf("Short of the balance.. Amount to withdraw should be equal or less than %.2f.\n",
-                    getBalance());
-        }
+        double remaining = getBalance() - amount;
+        if (remaining >= 0) setBalance(remaining);
+        else System.out.println("No sufficient balance to perform the withdraw.");
     }
 
     public void deposit(double amount) {
@@ -85,29 +74,6 @@ public class Account {
         } else {
             System.out.println("Invalid amount.. Amount to deposit needs to be positive.");
         }
-    }
-
-    // Caution! CDAccount is also instanceof Account!
-    // Parameter needs to be Object since this is overriding (same signature)
-    @Override
-    public boolean equals(Object other) { // Upcasting (implicit)
-        if (other instanceof Account) {
-            return getId() == ((Account)other).getId();
-            // Downcasting inside () is always descendent!
-        }
-        return false;
-    }
-
-    public void addMonthlyInterest() {
-        double monthlyInterest = getMonthlyInterest();
-        setBalance(getBalance() + monthlyInterest);
-    }
-
-    public void display() {
-        System.out.printf("%15d%20.2f%20.2f%15.2f%30s\n",
-                getId(), getBalance(), getMonthlyInterest(),
-                getBalance() + getMonthlyInterest(),
-                getDateCreated());
     }
 }
 
