@@ -43,8 +43,10 @@ public class SavingAccount extends Account{
 
     @Override
     public String toString() {
-        String output = String.format("Account Number: %d, Account Balance: $ %.2f",
-                getId(), getBalance());
+        String output = String.format("%8d   %18.2f   %18.2f   %11s ",
+                getId(), getBalance(),
+                getAnnualInterestRate(), "Saving");
+
         return output;
     }
 }

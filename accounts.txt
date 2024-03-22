@@ -1,0 +1,4 @@
+997	1000.00	5.000	CDAccount
+640	2000.00	0.000	CheckingAccount
+42	3000.00	3.000	SavingAccount
+82	4000.00	4.000	CDAccount
